@@ -33,15 +33,63 @@ function getPasswordCriteria() {
   return passwordOptions;
 }
 
+// Random function that will pick out a random character from the arrays
+function getRandom(arr) {
+  var randomIndex = Math.floor(Math.random() * arr.length)
+  var randomCharacter = arr[randomIndex];
+
+  return randomCharacter;
+}
+
 // Generate the password using the true and false values
 function generatePassword() {
   var options = getPasswordCriteria()
+  var finalPassword = [];
+  var potentialCharacters = [];
+  var guranteedCharacters = [];
+
+  if(!options ) return null;
+  if(options.containLowercase) {
+    potentialCharacters = potentialCharacters.concat(lowercase);
+    guranteedCharacters.push(getRandom(lowercase))
+  }
+
+  if (options.containUppercase) {
+    potentialCharacters = potentialCharacters.concat(uppercase);
+    guranteedCharacters.push(getRandom(uppercase))
+  }
+
+  if (options.containSpecial) {
+    potentialCharacters = potentialCharacters.concat(specials);
+    guranteedCharacters.push(getRandom(specials))
+  }
+
+  if (options.containNumbers) {
+    potentialCharacters = potentialCharacters.concat(numbers);
+    guranteedCharacters.push(getRandom(numbers))
+  }
+
+  for(i=0; i < options.length; i++) {
+    var possibleCharacter = getRandom(potentialCharacters);
+
+    finalPassword.push(possibleCharacter)
+  }
+
+  for(var i =0; i <guranteedCharacters.length; i ++) {
+    finalPassword[i] = guranteedCharacters[i];
+  }
+
+  return finalPassword.join('');
+
 }
-// Random function that will pick out a random character from the arrays
+
 
 // function to write the password using the criteria the user specified
 function writePassword(){
   var password = generatePassword();
+  var passwordText = document.querySelector('#password');
+
+  passwordText.value = password;
 }
 
 document.getElementById('generate').addEventListener('click', () =>{
